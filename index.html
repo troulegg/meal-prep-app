@@ -784,8 +784,10 @@
             const container = document.getElementById('todayMeal');
 
             if (todayMeal) {
-                const date = new Date(todayMeal.date);
-                const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+            // Fix timezone issue
+            const dateParts = todayMeal.date.split('-');
+            const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
                 
                 container.innerHTML = `
                     <div class="today-meal">
@@ -880,11 +882,13 @@
             const sortedMeals = [...window.meals].sort((a, b) => new Date(a.date) - new Date(b.date));
 
             container.innerHTML = sortedMeals.map(meal => {
-                const date = new Date(meal.date);
-                const formattedDate = date.toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
+            // Fix timezone issue by creating date with time component
+            const dateParts = meal.date.split('-');
+            const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric' 
                 });
 
                 let statusBadge = '';
