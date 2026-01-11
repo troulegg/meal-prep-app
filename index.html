@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Meal Prep</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Plan and track meals together">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Meal Prep">
+    
     <style>
         * {
             margin: 0;
@@ -120,7 +130,6 @@
             background: #48bb78;
             font-size: 14px;
             padding: 10px 20px;
-            margin-top: 12px;
         }
 
         #enableNotifications:hover {
@@ -596,9 +605,23 @@
             <h1>🍽️ Our Meal Prep</h1>
             <p class="subtitle">Plan and track meals together</p>
             <div id="todayMeal"></div>
-            <button id="enableNotifications" class="btn" style="display: none;">Enable Morning Reminders</button>
+            <div id="notificationControls" style="display: none; margin-top: 16px;">
+                <button id="enableNotifications" class="btn" style="margin-bottom: 8px;">Enable Notifications</button>
+                <div id="notificationSettings" style="display: none; margin-top: 12px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 12px; color: #333;">Notification Settings</div>
+                    <label style="display: flex; align-items: center; margin-bottom: 8px; cursor: pointer;">
+                        <input type="checkbox" id="dailyNotification" style="width: auto; margin-right: 8px;">
+                        <span style="font-size: 14px; color: #333;">Daily reminder at 7:00 AM</span>
+                    </label>
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="weeklyNotification" style="width: auto; margin-right: 8px;">
+                        <span style="font-size: 14px; color: #333;">Weekly summary on Sunday at 6:00 PM</span>
+                    </label>
+                </div>
+            </div>
         </div>
-<div class="setup-section" id="setupSection">
+
+        <div class="setup-section" id="setupSection">
             <div class="setup-title">⚙️ Firebase Setup Required</div>
             <div class="setup-instructions">
                 <p>To enable data sharing between you and your husband, you need to set up Firebase:</p>
@@ -708,6 +731,8 @@
         let notificationPermission = false;
         let currentView = 'list';
         let currentMonth = new Date();
+        let dailyNotificationEnabled = false;
+        let weeklyNotificationEnabled = false;
 
         // Initialize date input to today
         document.getElementById('mealDate').valueAsDate = new Date();
@@ -722,13 +747,37 @@
             });
         });
 
+        // Load notification preferences from localStorage
+        function loadNotificationPreferences() {
+            const daily = localStorage.getItem('dailyNotification');
+            const weekly = localStorage.getItem('weeklyNotification');
+            
+            if (daily !== null) {
+                dailyNotificationEnabled = daily === 'true';
+                document.getElementById('dailyNotification').checked = dailyNotificationEnabled;
+            }
+            
+            if (weekly !== null) {
+                weeklyNotificationEnabled = weekly === 'true';
+                document.getElementById('weeklyNotification').checked = weeklyNotificationEnabled;
+            }
+        }
+
+        // Save notification preferences
+        function saveNotificationPreferences() {
+            localStorage.setItem('dailyNotification', dailyNotificationEnabled);
+            localStorage.setItem('weeklyNotification', weeklyNotificationEnabled);
+        }
+
         // Notification setup
         if ('Notification' in window) {
             if (Notification.permission === 'granted') {
                 notificationPermission = true;
+                document.getElementById('notificationSettings').style.display = 'block';
+                loadNotificationPreferences();
                 scheduleNotificationCheck();
             } else if (Notification.permission !== 'denied') {
-                document.getElementById('enableNotifications').style.display = 'block';
+                document.getElementById('notificationControls').style.display = 'block';
             }
         }
 
@@ -738,13 +787,26 @@
                 if (permission === 'granted') {
                     notificationPermission = true;
                     document.getElementById('enableNotifications').style.display = 'none';
+                    document.getElementById('notificationSettings').style.display = 'block';
+                    loadNotificationPreferences();
                     scheduleNotificationCheck();
-                    new Notification('Morning Reminders Enabled! 🎉', {
-                        body: "You'll get a notification at 7 AM about today's meal (when the app is open)",
-                        icon: '🍽️'
+                    new Notification('Notifications Enabled! 🎉', {
+                        body: "Choose your notification preferences below",
+                        icon: '/icon-192.png'
                     });
                 }
             }
+        });
+
+        // Handle notification preference changes
+        document.getElementById('dailyNotification').addEventListener('change', (e) => {
+            dailyNotificationEnabled = e.target.checked;
+            saveNotificationPreferences();
+        });
+
+        document.getElementById('weeklyNotification').addEventListener('change', (e) => {
+            weeklyNotificationEnabled = e.target.checked;
+            saveNotificationPreferences();
         });
 
         function scheduleNotificationCheck() {
@@ -757,8 +819,10 @@
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
+            const dayOfWeek = now.getDay(); // 0 = Sunday
 
-            if (hours === 7 && minutes === 0) {
+            // Daily notification at 7:00 AM
+            if (dailyNotificationEnabled && hours === 7 && minutes === 0) {
                 const todayMeal = getTodayMeal();
                 if (todayMeal) {
                     let body = todayMeal.notes || 'Check the app for details!';
@@ -767,11 +831,50 @@
                     }
                     new Notification(`Today's Meal: ${todayMeal.name}`, {
                         body: body,
-                        icon: '🍽️',
+                        icon: '/icon-192.png',
+                        tag: 'daily-meal-reminder'
+                    });
+                } else {
+                    new Notification('No Meal Planned Today', {
+                        body: 'Don\'t forget to plan your meals for the week!',
+                        icon: '/icon-192.png',
                         tag: 'daily-meal-reminder'
                     });
                 }
             }
+
+            // Weekly notification on Sunday at 6:00 PM
+            if (weeklyNotificationEnabled && dayOfWeek === 0 && hours === 18 && minutes === 0) {
+                sendWeeklySummary();
+            }
+        }
+
+        function sendWeeklySummary() {
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            
+            // Get meals for the upcoming week
+            const upcomingMeals = window.meals.filter(meal => {
+                const mealDate = new Date(meal.date);
+                return mealDate >= today && mealDate < nextWeek;
+            }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let body = '';
+            if (upcomingMeals.length === 0) {
+                body = 'No meals planned for the upcoming week. Time to plan!';
+            } else if (upcomingMeals.length === 1) {
+                body = `1 meal planned: ${upcomingMeals[0].name}`;
+            } else {
+                const mealNames = upcomingMeals.slice(0, 3).map(m => m.name).join(', ');
+                body = `${upcomingMeals.length} meals planned: ${mealNames}${upcomingMeals.length > 3 ? '...' : ''}`;
+            }
+
+            new Notification('Weekly Meal Summary', {
+                body: body,
+                icon: '/icon-192.png',
+                tag: 'weekly-summary'
+            });
         }
 
         function getTodayMeal() {
@@ -784,10 +887,10 @@
             const container = document.getElementById('todayMeal');
 
             if (todayMeal) {
-            // Fix timezone issue
-            const dateParts = todayMeal.date.split('-');
-            const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-            const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+                // Fix timezone issue
+                const dateParts = todayMeal.date.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
                 
                 container.innerHTML = `
                     <div class="today-meal">
@@ -882,13 +985,13 @@
             const sortedMeals = [...window.meals].sort((a, b) => new Date(a.date) - new Date(b.date));
 
             container.innerHTML = sortedMeals.map(meal => {
-            // Fix timezone issue by creating date with time component
-            const dateParts = meal.date.split('-');
-            const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-            const formattedDate = date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
+                // Fix timezone issue by creating date with time component
+                const dateParts = meal.date.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                const formattedDate = date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
                 });
 
                 let statusBadge = '';
@@ -1053,6 +1156,21 @@
 
         window.renderMeals = renderMeals;
         window.displayTodayMeal = displayTodayMeal;
+    </script>
+    
+    <!-- Register Service Worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
