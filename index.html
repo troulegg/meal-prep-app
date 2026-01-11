@@ -42,6 +42,91 @@
             font-size: 14px;
         }
 
+        .setup-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .setup-title {
+            color: #856404;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .setup-instructions {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .setup-instructions ol {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .setup-instructions li {
+            margin-bottom: 8px;
+        }
+
+        .setup-instructions code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .today-meal {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .today-meal-title {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .today-meal-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .today-meal-cooking-time {
+            opacity: 0.95;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .today-meal-notes {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        #enableNotifications {
+            background: #48bb78;
+            font-size: 14px;
+            padding: 10px 20px;
+            margin-top: 12px;
+        }
+
+        #enableNotifications:hover {
+            background: #38a169;
+        }
+
         .add-meal-section {
             background: white;
             border-radius: 16px;
@@ -113,6 +198,36 @@
             font-weight: 600;
         }
 
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .view-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
         .meal-card {
             background: #f8f9fa;
             border-radius: 12px;
@@ -162,12 +277,6 @@
             font-size: 13px;
             font-weight: 600;
             margin-top: 6px;
-        }
-
-        .today-meal-cooking-time {
-            opacity: 0.95;
-            font-size: 14px;
-            margin-top: 4px;
         }
 
         .meal-notes {
@@ -256,43 +365,191 @@
             color: #666;
         }
 
-        .today-meal {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 16px;
-            border-radius: 12px;
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
             margin-top: 16px;
         }
 
-        .today-meal-title {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 4px;
-            text-transform: uppercase;
+        .calendar-header {
+            text-align: center;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            color: #667eea;
+            padding: 8px;
+            font-size: 14px;
         }
 
-        .today-meal-name {
-            font-size: 20px;
-            font-weight: 700;
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: white;
+            min-height: 80px;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .calendar-day-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 4px;
         }
 
-        .today-meal-notes {
-            font-size: 14px;
-            opacity: 0.95;
-            line-height: 1.4;
+        .calendar-meal-dot {
+            width: 100%;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-top: 4px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        #enableNotifications {
-            background: #48bb78;
-            font-size: 14px;
-            padding: 10px 20px;
+        .calendar-meal-dot:hover {
+            transform: scale(1.05);
         }
 
-        #enableNotifications:hover {
-            background: #38a169;
+        .calendar-meal-dot.planned {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .calendar-meal-dot.prepped {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .calendar-meal-dot.completed {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .week-view {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .week-day {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #667eea;
+        }
+
+        .week-day.today {
+            background: #f0f4ff;
+            border-left-color: #667eea;
+        }
+
+        .week-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .week-day-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .week-day-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .week-meals {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .week-meal-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .week-meal-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .week-meal-info {
+            flex: 1;
+        }
+
+        .week-meal-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .week-meal-time {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .week-no-meals {
+            color: #999;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .calendar-month-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+
+        .month-nav-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.2s;
+        }
+
+        .month-nav-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .current-month {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
         }
 
         @media (max-width: 600px) {
@@ -307,6 +564,29 @@
             .header, .add-meal-section, .meals-section {
                 padding: 16px;
             }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 4px;
+            }
+
+            .calendar-day-number {
+                font-size: 12px;
+            }
+
+            .calendar-meal-dot {
+                font-size: 9px;
+                padding: 2px 4px;
+            }
+
+            .view-toggle {
+                flex-wrap: wrap;
+            }
+
+            .view-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -315,8 +595,24 @@
         <div class="header">
             <h1>🍽️ Our Meal Prep</h1>
             <p class="subtitle">Plan and track meals together</p>
-            <div id="todayMeal" style="margin-top: 16px;"></div>
-            <button id="enableNotifications" class="btn" style="margin-top: 12px; display: none;">Enable Morning Reminders</button>
+            <div id="todayMeal"></div>
+            <button id="enableNotifications" class="btn" style="display: none;">Enable Morning Reminders</button>
+        </div>
+
+        <div class="setup-section" id="setupSection">
+            <div class="setup-title">⚙️ Firebase Setup Required</div>
+            <div class="setup-instructions">
+                <p>To enable data sharing between you and your husband, you need to set up Firebase:</p>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                    <li>Create a new project (name it anything, like "Meal Prep")</li>
+                    <li>Click "Add app" → Choose "Web" (</> icon)</li>
+                    <li>Register your app and copy the config values</li>
+                    <li>Replace the config in the code below (lines 600-606)</li>
+                    <li>In Firebase: Go to "Firestore Database" → "Create database" → Start in test mode</li>
+                </ol>
+                <p style="margin-top: 12px;"><strong>Need help?</strong> I can guide you through each step!</p>
+            </div>
         </div>
 
         <div class="add-meal-section">
@@ -343,21 +639,91 @@
         </div>
 
         <div class="meals-section">
-            <h2 class="section-title">Upcoming Meals</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 class="section-title" style="margin-bottom: 0;">Upcoming Meals</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="list">List</button>
+                    <button class="view-btn" data-view="week">Week</button>
+                    <button class="view-btn" data-view="calendar">Calendar</button>
+                </div>
+            </div>
             <div id="mealsContainer">
                 <div class="loading">Loading meals...</div>
             </div>
         </div>
     </div>
 
-    <script>
-        let meals = [];
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCf5SoLuJ7lRnKvRFl56j8uGW1S79uUTSM",
+  authDomain: "meal-planner-b66ef.firebaseapp.com",
+  projectId: "meal-planner-b66ef",
+  storageBucket: "meal-planner-b66ef.firebasestorage.app",
+  messagingSenderId: "652797873326",
+  appId: "1:652797873326:web:77e3e9c31ecd18fa25313f",
+  measurementId: "G-3NWNQ10TBZ"
+};
+
+        // Check if Firebase is configured
+        const isConfigured = firebaseConfig.apiKey !== "AIzaSyCf5SoLuJ7lRnKvRFl56j8uGW1S79uUTSM";
+        
+        if (!isConfigured) {
+            document.getElementById('setupSection').style.display = 'block';
+            document.getElementById('mealsContainer').innerHTML = '<div class="empty-state">Please complete Firebase setup above to start sharing meals!</div>';
+        } else {
+            document.getElementById('setupSection').style.display = 'none';
+        }
+
+        // Initialize Firebase
+        let app, db, mealsRef;
+        
+        if (isConfigured) {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                mealsRef = collection(db, 'meals');
+                
+                // Subscribe to real-time updates
+                const q = query(mealsRef, orderBy('date', 'asc'));
+                onSnapshot(q, (snapshot) => {
+                    window.meals = [];
+                    snapshot.forEach((doc) => {
+                        window.meals.push({ id: doc.id, ...doc.data() });
+                    });
+                    displayTodayMeal();
+                    renderMeals();
+                });
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                document.getElementById('mealsContainer').innerHTML = '<div class="empty-state">Error connecting to Firebase. Please check your configuration.</div>';
+            }
+        }
+
+        // Global variables
+        window.meals = [];
         let notificationPermission = false;
+        let currentView = 'list';
+        let currentMonth = new Date();
 
         // Initialize date input to today
         document.getElementById('mealDate').valueAsDate = new Date();
 
-        // Check notification support and show button if available
+        // View toggle buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.dataset.view;
+                renderMeals();
+            });
+        });
+
+        // Notification setup
         if ('Notification' in window) {
             if (Notification.permission === 'granted') {
                 notificationPermission = true;
@@ -367,7 +733,6 @@
             }
         }
 
-        // Enable notifications button
         document.getElementById('enableNotifications').addEventListener('click', async () => {
             if ('Notification' in window) {
                 const permission = await Notification.requestPermission();
@@ -383,24 +748,17 @@
             }
         });
 
-        // Schedule notification checks
         function scheduleNotificationCheck() {
-            // Check immediately
             checkAndNotify();
-            
-            // Check every minute
             setInterval(checkAndNotify, 60000);
         }
 
-        // Check if it's 7 AM and send notification
         async function checkAndNotify() {
             if (!notificationPermission) return;
-
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
 
-            // Check if it's 7:00 AM
             if (hours === 7 && minutes === 0) {
                 const todayMeal = getTodayMeal();
                 if (todayMeal) {
@@ -417,13 +775,11 @@
             }
         }
 
-        // Get today's meal
         function getTodayMeal() {
             const today = new Date().toISOString().split('T')[0];
-            return meals.find(meal => meal.date === today && meal.status !== 'completed');
+            return window.meals.find(meal => meal.date === today && meal.status !== 'completed');
         }
 
-        // Display today's meal
         function displayTodayMeal() {
             const todayMeal = getTodayMeal();
             const container = document.getElementById('todayMeal');
@@ -445,41 +801,16 @@
             }
         }
 
-        // Load meals on startup
-        async function loadMeals() {
-            try {
-                const result = await window.storage.get('meals', true);
-                if (result && result.value) {
-                    meals = JSON.parse(result.value);
-                } else {
-                    meals = [];
-                }
-                displayTodayMeal();
-                renderMeals();
-            } catch (error) {
-                console.log('No existing meals found, starting fresh');
-                meals = [];
-                displayTodayMeal();
-                renderMeals();
-            }
-        }
-
-        // Save meals to storage
-        async function saveMeals() {
-            try {
-                await window.storage.set('meals', JSON.stringify(meals), true);
-            } catch (error) {
-                console.error('Error saving meals:', error);
-                alert('There was an error saving. Please try again.');
-            }
-        }
-
         // Add new meal
         document.getElementById('mealForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            if (!isConfigured) {
+                alert('Please complete Firebase setup first!');
+                return;
+            }
+
             const newMeal = {
-                id: Date.now().toString(),
                 name: document.getElementById('mealName').value,
                 date: document.getElementById('mealDate').value,
                 cookingTime: document.getElementById('cookingTime').value,
@@ -488,49 +819,66 @@
                 createdAt: new Date().toISOString()
             };
 
-            meals.push(newMeal);
-            await saveMeals();
-            
-            // Reset form
-            document.getElementById('mealForm').reset();
-            document.getElementById('mealDate').valueAsDate = new Date();
-            
-            displayTodayMeal();
-            renderMeals();
+            try {
+                await addDoc(mealsRef, newMeal);
+                
+                // Reset form
+                document.getElementById('mealForm').reset();
+                document.getElementById('mealDate').valueAsDate = new Date();
+            } catch (error) {
+                console.error('Error adding meal:', error);
+                alert('Error adding meal. Please try again.');
+            }
         });
 
         // Update meal status
-        async function updateStatus(id, newStatus) {
-            const meal = meals.find(m => m.id === id);
-            if (meal) {
-                meal.status = newStatus;
-                await saveMeals();
-                displayTodayMeal();
-                renderMeals();
+        window.updateStatus = async function(id, newStatus) {
+            if (!isConfigured) return;
+            
+            try {
+                await updateDoc(doc(db, 'meals', id), { status: newStatus });
+            } catch (error) {
+                console.error('Error updating meal:', error);
+                alert('Error updating meal. Please try again.');
             }
-        }
+        };
 
         // Delete meal
-        async function deleteMeal(id) {
+        window.deleteMeal = async function(id) {
+            if (!isConfigured) return;
+            
             if (confirm('Are you sure you want to delete this meal?')) {
-                meals = meals.filter(m => m.id !== id);
-                await saveMeals();
-                displayTodayMeal();
-                renderMeals();
+                try {
+                    await deleteDoc(doc(db, 'meals', id));
+                } catch (error) {
+                    console.error('Error deleting meal:', error);
+                    alert('Error deleting meal. Please try again.');
+                }
+            }
+        };
+
+        // Render meals based on current view
+        function renderMeals() {
+            if (currentView === 'list') {
+                renderListView();
+            } else if (currentView === 'week') {
+                renderWeekView();
+            } else if (currentView === 'calendar') {
+                renderCalendarView();
             }
         }
 
-        // Render meals
-        function renderMeals() {
+        function renderListView() {
             const container = document.getElementById('mealsContainer');
             
-            if (meals.length === 0) {
+            if (!isConfigured) return;
+            
+            if (window.meals.length === 0) {
                 container.innerHTML = '<div class="empty-state">No meals planned yet. Add your first meal above!</div>';
                 return;
             }
 
-            // Sort meals by date
-            const sortedMeals = [...meals].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const sortedMeals = [...window.meals].sort((a, b) => new Date(a.date) - new Date(b.date));
 
             container.innerHTML = sortedMeals.map(meal => {
                 const date = new Date(meal.date);
@@ -579,7 +927,132 @@
             }).join('');
         }
 
-        // Load meals when page loads
+        function renderWeekView() {
+            const container = document.getElementById('mealsContainer');
+            
+            if (!isConfigured) return;
+            
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+
+            let weekHTML = '<div class="week-view">';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDay = new Date(startOfWeek);
+                currentDay.setDate(startOfWeek.getDate() + i);
+                const dateString = currentDay.toISOString().split('T')[0];
+                const isToday = dateString === today.toISOString().split('T')[0];
+
+                const dayMeals = window.meals.filter(meal => meal.date === dateString);
+
+                const dayName = currentDay.toLocaleDateString('en-US', { weekday: 'long' });
+                const dateFormatted = currentDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                weekHTML += `
+                    <div class="week-day ${isToday ? 'today' : ''}">
+                        <div class="week-day-header">
+                            <div class="week-day-name">${dayName}</div>
+                            <div class="week-day-date">${dateFormatted}</div>
+                        </div>
+                        <div class="week-meals">
+                `;
+
+                if (dayMeals.length === 0) {
+                    weekHTML += '<div class="week-no-meals">No meals planned</div>';
+                } else {
+                    dayMeals.forEach(meal => {
+                        weekHTML += `
+                            <div class="week-meal-item">
+                                <div class="week-meal-info">
+                                    <div class="week-meal-name">${meal.name}</div>
+                                    ${meal.cookingTime ? `<div class="week-meal-time">⏱️ ${meal.cookingTime}</div>` : ''}
+                                </div>
+                                <span class="status-badge status-${meal.status}">${meal.status}</span>
+                            </div>
+                        `;
+                    });
+                }
+
+                weekHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            weekHTML += '</div>';
+            container.innerHTML = weekHTML;
+        }
+
+        function renderCalendarView() {
+            const container = document.getElementById('mealsContainer');
+            
+            if (!isConfigured) return;
+            
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - startDate.getDay());
+
+            const monthName = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            let calendarHTML = `
+                <div class="calendar-month-nav">
+                    <button class="month-nav-btn" onclick="changeMonth(-1)">← Previous</button>
+                    <div class="current-month">${monthName}</div>
+                    <button class="month-nav-btn" onclick="changeMonth(1)">Next →</button>
+                </div>
+                <div class="calendar-grid">
+            `;
+
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                calendarHTML += `<div class="calendar-header">${day}</div>`;
+            });
+
+            const today = new Date().toISOString().split('T')[0];
+            const currentDate = new Date(startDate);
+
+            for (let i = 0; i < 42; i++) {
+                const dateString = currentDate.toISOString().split('T')[0];
+                const isCurrentMonth = currentDate.getMonth() === month;
+                const isToday = dateString === today;
+                const dayMeals = window.meals.filter(meal => meal.date === dateString);
+
+                calendarHTML += `
+                    <div class="calendar-day ${!isCurrentMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}">
+                        <div class="calendar-day-number">${currentDate.getDate()}</div>
+                `;
+
+                dayMeals.forEach(meal => {
+                    calendarHTML += `
+                        <div class="calendar-meal-dot ${meal.status}" title="${meal.name}">
+                            ${meal.name}
+                        </div>
+                    `;
+                });
+
+                calendarHTML += '</div>';
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            calendarHTML += '</div>';
+            container.innerHTML = calendarHTML;
+        }
+
+        window.changeMonth = function(delta) {
+            currentMonth.setMonth(currentMonth.getMonth() + delta);
+            renderCalendarView();
+        };
+
+        window.renderMeals = renderMeals;
+        window.displayTodayMeal = displayTodayMeal;
+    </script>
+</body>
+</html>
         loadMeals();
     </script>
 </body>
